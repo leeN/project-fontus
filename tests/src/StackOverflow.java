@@ -8,7 +8,7 @@ class StackOverflow {
     }
 
     public static void main(String[] args) {
-        int[] bounds = { 10, 100, 1000, 10000, 100000, 1000000 };
+        int[] bounds = { 10, 100, 1000, 10000, 100000, 1000000, 10000000, 10000000, 10000000 };
         for(int bound : bounds) {
             // The main wrapper method messes with stack depth..
             // So outputting it here breaks the test.
@@ -17,8 +17,8 @@ class StackOverflow {
                 downToZero(bound);
             }
             catch(StackOverflowError e){
-                System.err.println(e.getMessage());
-                System.exit(0);
+                System.err.println(e);
+                System.exit(-1);
             }
         }
     }
