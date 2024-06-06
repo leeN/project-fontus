@@ -37,6 +37,9 @@ public final class Constants {
     public static final String TaintHandlerTaintDesc;
     public static final String TaintHandlerCheckTaintName;
     public static final String TaintHandlerCheckTaintDesc;
+    public static final String TaintHandlerParamsTaintName;
+    public static final String TaintHandlerParamsTaintDesc;
+
     public static final String PropertyDesc;
     public static final String PropertyQN;
     public static final String JDK_INHERITANCE_BLACKLIST_FILENAME = "jdk_inheritance_blacklist.csv";
@@ -67,6 +70,8 @@ public final class Constants {
             TaintHandlerQN = Utils.getInternalName(IASTaintHandler.class);
             TaintHandlerTaintName = IASTaintHandler.class.getMethod("taint", Object.class, Object.class, Object[].class, int.class, String.class).getName();
             TaintHandlerTaintDesc = Descriptor.parseMethod(IASTaintHandler.class.getMethod("taint", Object.class, Object.class, Object[].class, int.class, String.class)).toDescriptor();
+            TaintHandlerParamsTaintName = IASTaintHandler.class.getMethod("setParamTaints", Object.class, Object[].class, int.class, String.class).getName();
+            TaintHandlerParamsTaintDesc = Descriptor.parseMethod(IASTaintHandler.class.getMethod("setParamTaints", Object.class, Object[].class, int.class, String.class)).toDescriptor();
             TaintHandlerCheckTaintName = IASTaintHandler.class.getMethod("checkTaint", Object.class, Object.class, String.class, String.class, String.class).getName();
             TaintHandlerCheckTaintDesc = Descriptor.parseMethod(IASTaintHandler.class.getMethod("checkTaint", Object.class, Object.class, String.class, String.class, String.class)).toDescriptor();
             CompareProxyEqualsDesc = Descriptor.parseMethod(IASCompareProxy.class.getMethod("compareRefEquals", Object.class, Object.class)).toDescriptor();

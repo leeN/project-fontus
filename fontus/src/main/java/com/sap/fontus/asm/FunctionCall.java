@@ -56,7 +56,7 @@ public class FunctionCall {
         this.opcode = opcode;
         this.owner = owner;
         this.name = name;
-        this.descriptor = descriptor;
+        this.descriptor = descriptor.trim();
         this.parsedDescriptor = Descriptor.parseDescriptor(descriptor);
         this.isInterface = isInterface;
     }
@@ -146,7 +146,7 @@ public class FunctionCall {
     }
 
     public String getDescriptor() {
-        return this.descriptor;
+        return this.descriptor.trim();
     }
 
     public Descriptor getParsedDescriptor() {

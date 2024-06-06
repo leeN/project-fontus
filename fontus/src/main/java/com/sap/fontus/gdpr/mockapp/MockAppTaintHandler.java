@@ -1,19 +1,28 @@
-package com.sap.fontus.gdpr.handler;
+package com.sap.fontus.gdpr.mockapp;
 
 import com.iabtcf.decoder.TCString;
-import com.sap.fontus.gdpr.metadata.GdprMetadata;
-import com.sap.fontus.gdpr.tcf.TcfBackedGdprMetadata;
+import com.sap.fontus.gdpr.Utils;
+import com.sap.fontus.gdpr.metadata.*;
+import com.sap.fontus.gdpr.metadata.simple.SimpleDataId;
+import com.sap.fontus.gdpr.metadata.simple.SimpleDataSubject;
+import com.sap.fontus.gdpr.metadata.simple.SimpleGdprMetadata;
 import com.sap.fontus.gdpr.servlet.ReflectedCookie;
 import com.sap.fontus.gdpr.servlet.ReflectedHttpServletRequest;
+import com.sap.fontus.gdpr.tcf.TcfBackedGdprMetadata;
 import com.sap.fontus.taintaware.IASTaintAware;
 import com.sap.fontus.taintaware.shared.IASTaintSource;
 import com.sap.fontus.taintaware.shared.IASTaintSourceRegistry;
 import com.sap.fontus.taintaware.unified.IASString;
 import com.sap.fontus.taintaware.unified.IASTaintHandler;
+import com.sap.fontus.utils.UnsafeUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-public class GdprTaintHandler extends IASTaintHandler {
+public class MockAppTaintHandler extends IASTaintHandler {
 
 
 
@@ -92,6 +101,46 @@ public class GdprTaintHandler extends IASTaintHandler {
      *
      */
     public static Object taint(Object object, Object parent, Object[] parameters, int sourceId, String callerFunction) {
-        return IASTaintHandler.taint(object, parent, parameters, sourceId, callerFunction, GdprTaintHandler::setTaint);
+        return IASTaintHandler.taint(object, parent, parameters, sourceId, callerFunction, MockAppTaintHandler::setTaint);
+    }
+
+    public static Object[] signUp(Object instance, Object[] parameters, int sourceId, String callerFunction) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        System.out.println("        Instance Type:" + instance);
+        System.out.println("        Caller:" + callerFunction);
+        System.out.println("        Caller Type:" + instance);
+        System.out.println("        Input Parameters: " + Arrays.toString(parameters));
+        if (parameters != null) {
+            for (int i = 0; i < parameters.length; i++) {
+                System.out.println("                  " + i + ": " + parameters[i].toString());
+            }
+        }
+        Method getUserName = parameters[0].getClass().getMethod("getUsername");
+        UnsafeUtils.setAccessible(getUserName);
+        IASString username = (IASString) getUserName.invoke(parameters[0]);
+
+        ReflectedHttpServletRequest request = new ReflectedHttpServletRequest(parameters[1]);
+        DataSubject ds = new SimpleDataSubject(username.getString());
+        Collection<AllowedPurpose> allowed = Utils.getPurposesFromRequest(request);
+        GdprMetadata metadata = new SimpleGdprMetadata(
+                allowed,
+                ProtectionLevel.Normal,
+                ds,
+                new SimpleDataId(),
+                true,
+                true,
+                Identifiability.NotExplicit);
+        System.out.printf("Tainting username: '%s'%n", username.getString());
+        username.setTaint(new GdprTaintMetadata(sourceId, metadata));
+        Method getInterests = parameters[0].getClass().getMethod("getInterests");
+        UnsafeUtils.setAccessible(getInterests);
+        Method setInterests = parameters[0].getClass().getMethod("setInterests", List.class);
+        UnsafeUtils.setAccessible(setInterests);
+        List<IASString> interests = (List<IASString>) getInterests.invoke(parameters[0]);
+        for(IASString interest : interests) {
+            System.out.printf("Tainting interest: '%s'%n", interest.toString());
+            interest.setTaint(new GdprTaintMetadata(sourceId, metadata));
+        }
+        setInterests.invoke(parameters[0], interests);
+        return parameters;
     }
 }

@@ -78,6 +78,8 @@ public class Configuration {
 
     @XmlElement
     private final SourceConfig sourceConfig;
+    @XmlElement
+    private final ParamSourceConfig paramSourceConfig;
 
     @XmlElement
     private final SinkConfig sinkConfig;
@@ -129,6 +131,7 @@ public class Configuration {
     public Configuration() {
         this.verbose = false;
         this.sourceConfig = new SourceConfig();
+        this.paramSourceConfig = new ParamSourceConfig();
         this.sinkConfig = new SinkConfig();
         this.purposes = new ArrayList<>();
         this.vendors = new ArrayList<>();
@@ -145,6 +148,7 @@ public class Configuration {
 
     public Configuration(boolean verbose,
                          SourceConfig sourceConfig,
+                         ParamSourceConfig paramSourceConfig,
                          SinkConfig sinkConfig,
                          List<Purpose> purposes,
                          List<Vendor> vendors,
@@ -159,6 +163,7 @@ public class Configuration {
                          List<PropagateTaintInFunction> propagateTaintInFunctions) {
         this.verbose = verbose;
         this.sourceConfig = sourceConfig;
+        this.paramSourceConfig = paramSourceConfig;
         this.sinkConfig = sinkConfig;
         this.purposes = purposes;
         this.vendors = vendors;
@@ -178,6 +183,7 @@ public class Configuration {
             this.verbose |= other.verbose;
             this.persistentCache |= other.persistentCache;
             this.sourceConfig.append(other.sourceConfig);
+            this.paramSourceConfig.append(other.paramSourceConfig);
             this.sinkConfig.append(other.sinkConfig);
             this.vendors.addAll(other.vendors);
             this.purposes.addAll(other.purposes);
@@ -280,6 +286,10 @@ public class Configuration {
 
     public SourceConfig getSourceConfig() {
         return this.sourceConfig;
+    }
+
+    public ParamSourceConfig getParamSourceConfig() {
+        return this.paramSourceConfig;
     }
 
     public SinkConfig getSinkConfig() {
@@ -631,6 +641,7 @@ public class Configuration {
                 ", loggingEnabled=" + this.loggingEnabled +
                 ", recursiveTainting=" + this.recursiveTainting +
                 ", sourceConfig=" + this.sourceConfig +
+                ", paramSourceConfig=" + this.paramSourceConfig +
                 ", sinkConfig=" + this.sinkConfig +
                 ", vendors=" + this.vendors +
                 ", purposes=" + this.purposes +

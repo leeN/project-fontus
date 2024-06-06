@@ -81,6 +81,17 @@ public class IASTaintHandler {
         return taintAware;
     }
 
+    public static Object[] setParamTaints(Object parentObject, Object[] parameters, int sourceId, String callerFunction) {
+        if (Configuration.getConfiguration().collectStats()) {
+            recordSourceStatistics(sourceId, callerFunction);
+        }
+
+        for(int i=0; i<parameters.length; i++) {
+            parameters[i] = taint(parameters[i], parentObject, parameters, sourceId, callerFunction);
+        }
+        return parameters;
+    }
+
     private static IASTaintAware setTaint(IASTaintAware taintAware, Object parentObject, Object[] parameters, int sourceId, String callerFunction) {
         IASTaintSource source = IASTaintSourceRegistry.getInstance().get(sourceId);
         taintAware.setTaint(new IASBasicMetadata(source));
@@ -256,11 +267,11 @@ public class IASTaintHandler {
 
     public static boolean isValidTaintHandler(FunctionCall function) {
         // Check at least the descriptor is right
-        return (function.getDescriptor().equals(Constants.TaintHandlerTaintDesc));
+        return (function.getDescriptor().trim().equals(Constants.TaintHandlerTaintDesc));
     }
 
     public static boolean isValidTaintChecker(FunctionCall function) {
         // Check at least the descriptor is right
-        return (function.getDescriptor().equals(Constants.TaintHandlerCheckTaintDesc));
+        return (function.getDescriptor().trim().equals(Constants.TaintHandlerCheckTaintDesc));
     }
 }

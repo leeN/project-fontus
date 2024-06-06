@@ -8,6 +8,7 @@ import com.sap.fontus.config.Sink;
 import com.sap.fontus.config.SinkParameter;
 import com.sap.fontus.config.Source;
 import com.sap.fontus.instrumentation.InstrumentationHelper;
+import com.sap.fontus.taintaware.shared.IASParamsTaintSourceRegistry;
 import com.sap.fontus.taintaware.shared.IASTaintSourceRegistry;
 import com.sap.fontus.taintaware.unified.IASString;
 import com.sap.fontus.taintaware.unified.IASStringUtils;
@@ -182,7 +183,7 @@ public class IASMethod extends IASExecutable<Method> {
             // Manipulate all necessary parameters by applying taint checker
             for (SinkParameter parameter : sink.getParameters()) {
                 int i = parameter.getIndex();
-                if ((i > 0) && (i < parameters.length)) {
+                if ((i >= 0) && (i < parameters.length)) {
                     // Call the taint handler by reflection
                     if (taintCheckerMethod != null) {
                         parameters[i] = taintCheckerMethod.invoke(null, parameters[i], instance, sink.getFunction().getFqn(), sink.getName(), Constants.MethodInvokeFqn);
@@ -190,6 +191,26 @@ public class IASMethod extends IASExecutable<Method> {
                         parameters[i] = IASTaintHandler.checkTaint(parameters[i], instance, sink.getFunction().getFqn(), sink.getName(), Constants.MethodInvokeFqn);
                     }
                 }
+            }
+        }
+        Source paramSource = Configuration.getConfiguration().getParamSourceConfig().getSourceForFunction(uninstrumented);
+        taintCheckerMethod = null;
+        if(paramSource != null) {
+            // Check for custom taint checker method
+            FunctionCall taintHandler = paramSource.getTaintHandler();
+            if (!taintHandler.isEmpty()) {
+                try {
+                    taintCheckerMethod = FunctionCall.toMethod(taintHandler);
+                } catch (Exception e) {
+                    System.err.printf("FONTUS: Exception finding taint handler %s for param source %s!%n", taintHandler, paramSource.getFunction());
+                    e.printStackTrace();
+                }
+            }
+            if (taintCheckerMethod != null) {
+                parameters = (Object[]) taintCheckerMethod.invoke(null, instance, parameters, IASParamsTaintSourceRegistry.getInstance().get(paramSource.getName()).getId(), Constants.MethodInvokeFqn);
+
+            } else {
+                parameters = IASTaintHandler.setParamTaints(instance, parameters, IASParamsTaintSourceRegistry.getInstance().get(paramSource.getName()).getId(),  Constants.MethodInvokeFqn);
             }
         }
 

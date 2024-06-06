@@ -502,6 +502,13 @@ public class MethodTaintingVisitor extends BasicMethodVisitor {
             transformer.addReturnTransformation(t);
         }
 
+        Source paramSource = this.config.getParamSourceConfig().getSourceForFunction(call);
+        if ((paramSource != null) && (paramSource.isAllowedCaller(this.caller.toFunctionCall()))) {
+            logger.info("Adding param source tainting for [{}] {}.{}{} for caller {}.{}", Utils.opcodeToString(call.getOpcode()), call.getOwner(), call.getName(), call.getDescriptor(), this.caller.getOwner(), this.caller.getName());
+            SourceTransformer t = new SourceTransformer(source, this.used, this.caller.toFunctionCall());
+            transformer.addReturnTransformation(t);
+        }
+
         // Add Sink transformations
         Sink sink = this.config.getSinkConfig().getSinkForFunction(call, new Position(this.owner, this.name, this.line));
         if (sink != null) {
