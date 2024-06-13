@@ -1,8 +1,11 @@
 package com.sap.fontus.gdpr.mockapp;
 
 import com.iabtcf.decoder.TCString;
+import com.sap.fontus.config.Configuration;
+import com.sap.fontus.config.Sink;
 import com.sap.fontus.gdpr.Utils;
 import com.sap.fontus.gdpr.metadata.*;
+import com.sap.fontus.gdpr.metadata.registry.RequiredPurposeRegistry;
 import com.sap.fontus.gdpr.metadata.simple.SimpleDataId;
 import com.sap.fontus.gdpr.metadata.simple.SimpleDataSubject;
 import com.sap.fontus.gdpr.metadata.simple.SimpleGdprMetadata;
@@ -18,6 +21,7 @@ import com.sap.fontus.utils.UnsafeUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -114,9 +118,10 @@ public class MockAppTaintHandler extends IASTaintHandler {
                 System.out.println("                  " + i + ": " + parameters[i].toString());
             }
         }
-        Method getUserName = parameters[0].getClass().getMethod("getUsername");
-        UnsafeUtils.setAccessible(getUserName);
-        IASString username = (IASString) getUserName.invoke(parameters[0]);
+
+
+        IASString username = (IASString) invokeGetter(parameters[0], "getUsername");
+        IASString email = (IASString) invokeGetter(parameters[0], "getEmail");
 
         ReflectedHttpServletRequest request = new ReflectedHttpServletRequest(parameters[1]);
         DataSubject ds = new SimpleDataSubject(username.getString());
@@ -131,16 +136,33 @@ public class MockAppTaintHandler extends IASTaintHandler {
                 Identifiability.NotExplicit);
         System.out.printf("Tainting username: '%s'%n", username.getString());
         username.setTaint(new GdprTaintMetadata(sourceId, metadata));
-        Method getInterests = parameters[0].getClass().getMethod("getInterests");
-        UnsafeUtils.setAccessible(getInterests);
+        System.out.printf("Tainting enail: '%s'%n", email.getString());
+        email.setTaint(new GdprTaintMetadata(sourceId, metadata));
         Method setInterests = parameters[0].getClass().getMethod("setInterests", List.class);
         UnsafeUtils.setAccessible(setInterests);
-        List<IASString> interests = (List<IASString>) getInterests.invoke(parameters[0]);
+        List<IASString> interests = (List<IASString>) invokeGetter(parameters[0], "getInterests");
         for(IASString interest : interests) {
             System.out.printf("Tainting interest: '%s'%n", interest.toString());
             interest.setTaint(new GdprTaintMetadata(sourceId, metadata));
         }
         setInterests.invoke(parameters[0], interests);
         return parameters;
+    }
+    public static Object checkInterests(Object object, Object instance, String sinkFunction, String sinkName, String callerFunction) {
+        List<IASString> interests = (List<IASString>) object;
+        List<IASString> validInterests = new ArrayList<>(interests.size());
+        Sink sink = Configuration.getConfiguration().getSinkConfig().getSinkForFqn(sinkFunction);
+        RequiredPurposes requiredPurposes = RequiredPurposeRegistry.getPurposeFromSink(sink);
+        for(IASString interest : interests) {
+            if(!Utils.checkPolicyViolation(requiredPurposes, interest)) {
+                validInterests.add(interest);
+            }
+        }
+        return validInterests;
+    }
+    private static Object invokeGetter(Object obj, String name) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        Method method = obj.getClass().getMethod(name);
+        UnsafeUtils.setAccessible(method);
+        return method.invoke(obj);
     }
 }
