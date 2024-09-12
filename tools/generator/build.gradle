@@ -21,10 +21,10 @@ dependencies {
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3'
     implementation 'info.picocli:picocli:4.6.3'
-    implementation 'org.ow2.asm:asm:9.2'
-    implementation 'org.ow2.asm:asm-commons:9.2'
-    implementation 'org.ow2.asm:asm-analysis:9.2'
-    implementation 'org.ow2.asm:asm-util:9.2'
+    implementation 'org.ow2.asm:asm:9.7'
+    implementation 'org.ow2.asm:asm-commons:9.7'
+    implementation 'org.ow2.asm:asm-analysis:9.7'
+    implementation 'org.ow2.asm:asm-util:9.7'
 }
 
 application {
