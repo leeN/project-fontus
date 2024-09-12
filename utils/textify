@@ -7,8 +7,8 @@ CUT_PREFIX="${3:?Part of input directory to cut as third parameter required}"
 
 for CLASS_FILE in "$SOURCE_DIR"/**/*.class; do
   f=${CLASS_FILE#"$CUT_PREFIX"}
-  DIRNAME="$(dirname $f)"
-  BASENAME="$(basename $f)"
+  DIRNAME="$(dirname ${f})"
+  BASENAME="$(basename ${f})"
   OUT_NAME="${BASENAME%.class}.bc"
   echo "$DIRNAME -> $BASENAME -> $OUT_NAME"
   TARGET_PKG_DIR="$TARGET_DIR/$DIRNAME"

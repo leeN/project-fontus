@@ -10,7 +10,7 @@ _die() {
 }
 
 _cd_out () {
-  cd - 2>&1 >/dev/null
+  cd - 2>&1 /dev/null || exit 1
 }
 
 JAR_FOLDERS=(

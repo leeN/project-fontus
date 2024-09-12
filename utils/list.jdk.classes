@@ -14,6 +14,6 @@ if ! [[ -f "${JDK}" ]]; then
   _die "No src.zip found at '$JDK', exiting.."
 fi
 
-unzip -l ${JDK} | grep "\.java$" | grep -v "\(module\|package\)-info\.java$" | awk '{ if ($4 ~ /\./) { print substr($4, index($4, "/")+1) } else { print $4 }}' | cut -f 1 -d '.'
+unzip -l "${JDK}" | grep "\.java$" | grep -v "\(module\|package\)-info\.java$" | awk '{ if ($4 ~ /\./) { print substr($4, index($4, "/")+1) } else { print $4 }}' | cut -f 1 -d '.'
 
 #unzip -l "${JDK}" | grep "\.java$" | grep -v "package-info\.java$" | awk '{print $4}' | cut -f 1 -d '.'
