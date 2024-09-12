@@ -2,7 +2,7 @@ package com.sap.fontus.taintaware.unified;
 
 import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.TaintMethod;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +24,8 @@ public class IASPropertiesTest {
         IASString g2 = user.getProperty(k2);
         IASString g1 = user.getProperty(IASString.fromString("sup"));
 
-        Assert.assertEquals(IASString.fromString("up"), g2);
-        Assert.assertEquals(IASString.fromString("son"), g1);
+        Assertions.assertEquals(IASString.fromString("up"), g2);
+        Assertions.assertEquals(IASString.fromString("son"), g1);
     }
 
 }

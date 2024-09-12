@@ -4,14 +4,12 @@ import com.sap.fontus.taintaware.shared.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport;
 
 /**
  * JUnit tests for sanitization of possible xss attacks
  */
-@EnableJUnit4MigrationSupport
 class XssSanitizationTest {
 
     private static final IASTaintMetadata source = new IASBasicMetadata(IASTaintSourceRegistry.getInstance().getOrRegisterObject("dummy"));
@@ -189,7 +187,7 @@ class XssSanitizationTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void testCssStringTainted_2() {
         // missing quotation in inline css string
         String taintedString = "<html> <body> <h1 style=color:red;>Red Heading</h1> </body> </html>";

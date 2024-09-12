@@ -12,19 +12,14 @@ import com.sap.fontus.taintaware.unified.IASPreparedStatementUtils;
 import com.sap.fontus.taintaware.unified.IASString;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statements;
-import org.junit.Ignore;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.*;
 
 import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings({"JDBCResourceOpenedButNotSafelyClosed", "CallToDriverManagerGetConnection", "SqlResolve", "JDBCPrepareStatementWithNonConstantString", "JDBCExecuteWithNonConstantString"})
-@EnableJUnit4MigrationSupport
 class PreparedStatementTests {
 
     @BeforeAll
@@ -70,7 +65,7 @@ class PreparedStatementTests {
     }
 
     @Test
-    @Ignore("Known issue with SQL rewriter")
+    @Disabled("Known issue with SQL rewriter")
     void testInsertSubselect() throws Exception {
         String query = "INSERT INTO contacts VALUES(?, (select info from meta where contact_id = ?), ?, ?, ?)";
         Connection mc = new MockConnection(this.conn);

@@ -2,6 +2,7 @@ package com.sap.fontus.taintaware.unified;
 
 import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.TaintMethod;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -45,8 +46,8 @@ public class IASProxyProxyTest {
         );
         A a = (A)abProxy;
         B b = (B)abProxy;
-        assertEquals(ab.getA(), a.getA());
-        assertEquals(ab.getB(), b.getB());
+        Assertions.assertEquals(ab.getA(), a.getA());
+        Assertions.assertEquals(ab.getB(), b.getB());
     }
 
     @Test
@@ -60,8 +61,8 @@ public class IASProxyProxyTest {
         );
         A a = (A)abProxy;
         B b = (B)abProxy;
-        assertEquals(ab.getA(), a.getA());
-        assertEquals(ab.getB(), b.getB());
+        Assertions.assertEquals(ab.getA(), a.getA());
+        Assertions.assertEquals(ab.getB(), b.getB());
     }
 
 }

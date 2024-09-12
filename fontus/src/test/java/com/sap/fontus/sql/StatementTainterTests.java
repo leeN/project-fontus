@@ -1,22 +1,14 @@
 package com.sap.fontus.sql;
 
-import com.sap.fontus.sql.driver.ConnectionWrapper;
 import com.sap.fontus.sql.tainter.StatementTainter;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statements;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnableJUnit4MigrationSupport
 class StatementTainterTests {
 
     @Test
@@ -70,7 +62,7 @@ class StatementTainterTests {
     }
 
     @Test
-    @Ignore // Copied from the .sql file for debugging
+    @Disabled("Fails") // Copied from the .sql file for debugging
     void testInsert2() throws JSQLParserException {
         String query = "INSERT INTO customers (name, vorname) VALUES ('Max', 'Mustermann'); insert into users VALUES ('peter') returning id;";
         Statements stmts = CCJSqlParserUtil.parseStatements(query);

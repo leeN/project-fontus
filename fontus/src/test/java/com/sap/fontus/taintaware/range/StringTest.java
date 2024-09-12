@@ -12,11 +12,10 @@ import com.sap.fontus.taintaware.shared.IASTaintSourceRegistry;
 import com.sap.fontus.taintaware.unified.IASString;
 import com.sap.fontus.taintaware.unified.IASStringBuffer;
 import com.sap.fontus.taintaware.unified.IASStringBuilder;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport;
 
 import java.util.Locale;
 
@@ -28,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SuppressWarnings({"StringToUpperCaseOrToLowerCaseWithoutLocale", "UnnecessaryUnicodeEscape"})
-@EnableJUnit4MigrationSupport
 class StringTest {
     @BeforeAll
     static void init() {
@@ -279,7 +277,7 @@ class StringTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void replace() {
         THelper.get(this.foo).addRange(0, 1, md);
 
@@ -520,8 +518,7 @@ class StringTest {
     }
 
     @Test
-    // Compile encoding issues with AdoptOpenJDK on Windows
-    @Ignore
+    @Disabled("Compile encoding issues with AdoptOpenJDK on Windows")
     void toLowerCase() {
         // For examples of characters that "grow" when lowercasing them see "ConditionalSpecialCasing.java"
         Locale lithuanian = new Locale("lt");
@@ -556,8 +553,7 @@ class StringTest {
     }
 
     @Test
-    // Compile encoding issues with AdoptOpenJDK on Windows
-    @Ignore
+    @Disabled("Compile encoding issues with AdoptOpenJDK on Windows")
     void toUpperCase() {
         assertThat("ß".toUpperCase(), is("SS"));
 
