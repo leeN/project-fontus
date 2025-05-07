@@ -71,7 +71,7 @@ public class ContestAction implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws SQLException {
         this.connection.close();
     }
 }

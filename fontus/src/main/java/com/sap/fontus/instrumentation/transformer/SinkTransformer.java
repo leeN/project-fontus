@@ -5,6 +5,7 @@ import com.sap.fontus.asm.FunctionCall;
 import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.Sink;
 import com.sap.fontus.Constants;
+import com.sap.fontus.exceptions.ConfigurationException;
 import com.sap.fontus.instrumentation.MethodTaintingVisitor;
 import com.sap.fontus.instrumentation.InstrumentationHelper;
 import com.sap.fontus.taintaware.unified.IASTaintHandler;
@@ -68,7 +69,7 @@ public class SinkTransformer extends SourceOrSinkTransformer implements Paramete
             if (taint.isEmpty()) {
                 taint = defaultTaintChecker;
             } else if (!IASTaintHandler.isValidTaintChecker(taint)) {
-                throw new RuntimeException("Invalid Taint Checker " + taint + " in configuration file (need descriptor: " + Constants.TaintHandlerCheckTaintDesc + ")");
+                throw new ConfigurationException("Invalid Taint Checker " + taint + " in configuration file (need descriptor: " + Constants.TaintHandlerCheckTaintDesc + ")");
             }
             originalVisitor.visitMethodInsn(taint.getOpcode(), taint.getOwner(), taint.getName(), taint.getDescriptor(), taint.isInterface());
             originalVisitor.visitTypeInsn(Opcodes.CHECKCAST, Type.getType(instrumentedType).getInternalName());

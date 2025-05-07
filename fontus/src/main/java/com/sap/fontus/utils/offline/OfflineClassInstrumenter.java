@@ -21,11 +21,11 @@ public class OfflineClassInstrumenter {
     }
 
     public void instrumentClassFile(File input, File output) throws IOException {
-        FileInputStream fi = new FileInputStream(input);
-        FileOutputStream fo = new FileOutputStream(output);
-        logger.info("Reading class file from: {}", input.getAbsolutePath());
-        this.instrumentClassStream(fi, fo);
-        logger.info("Writing transformed class file to: {}", output.getAbsolutePath());
+        try(FileInputStream fi = new FileInputStream(input); FileOutputStream fo = new FileOutputStream(output)) {
+            logger.info("Reading class file from: {}", input.getAbsolutePath());
+            this.instrumentClassStream(fi, fo);
+            logger.info("Writing transformed class file to: {}", output.getAbsolutePath());
+        }
     }
 
 

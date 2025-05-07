@@ -6,6 +6,7 @@ import com.sap.fontus.Constants;
 import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.TaintMethod;
 import com.sap.fontus.config.taintloss.TaintlossHandler;
+import com.sap.fontus.exceptions.ConfigurationException;
 import com.sap.fontus.utils.IOUtils;
 import com.sap.fontus.utils.LogUtils;
 import com.sap.fontus.utils.Logger;
@@ -159,14 +160,14 @@ public class AgentConfig {
         c.setParallel(parallel);
 
         if(hybridMode && instrumentedClassesFile == null) {
-            throw new RuntimeException("Hybrid mode is on, but no instrumented_classes_file provided");
+            throw new ConfigurationException("Hybrid mode is on, but no instrumented_classes_file provided");
         }
         if (instrumentedClassesFile != null) {
             try {
                 List<String> classes = IOUtils.readAllLines(instrumentedClassesFile);
                 c.setInstumentedClasses(classes);
             } catch (IOException e) {
-                throw new RuntimeException("Could not read instrumented_classes_file");
+                throw new ConfigurationException("Could not read instrumented_classes_file");
             }
         }
         if (useCaching != null) {

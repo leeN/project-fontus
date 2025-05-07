@@ -1,5 +1,7 @@
 package com.sap.fontus.taintaware.unified;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
+
 import java.lang.reflect.Field;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -19,7 +21,7 @@ public final class IASMatcher {
                 textField.setAccessible(true);
                 return (String) textField.get(origMatcher);
             } catch (IllegalAccessException | NoSuchFieldException e) {
-                throw new RuntimeException(e);
+                throw new FontusRuntimeException(e);
             }
         }).apply(matcher));
     }

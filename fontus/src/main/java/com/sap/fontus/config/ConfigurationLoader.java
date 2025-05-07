@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.sap.fontus.Constants;
+import com.sap.fontus.exceptions.ConfigurationException;
 import com.sap.fontus.instrumentation.BlackListEntry;
 import com.sap.fontus.utils.LogUtils;
 import com.sap.fontus.utils.Logger;
@@ -34,12 +35,10 @@ public final class ConfigurationLoader {
             return mapper.readValue(stream, Configuration.class);
         } catch (JsonParseException | JsonMappingException e) {
             logger.error("Malformed configuration resource file, aborting!");
-            // TODO: ugly exception, find more fitting one!
-            throw new IllegalStateException("Missing configuration file\nAborting!", e);
+            throw new ConfigurationException("Missing configuration file\nAborting!", e);
         } catch (IOException e) {
             logger.error("Can't find the configuration resource file, aborting!");
-            // TODO: ugly exception, find more fitting one!
-            throw new IllegalStateException("Missing configuration file\nAborting!", e);
+            throw new ConfigurationException("Missing configuration file\nAborting!", e);
         }
     }
 
@@ -51,8 +50,8 @@ public final class ConfigurationLoader {
 
     public static Map<String, List<BlackListEntry>> defaultJdkInheritanceBlacklistEntries() {
         Map<String, List<BlackListEntry>> map = new HashMap<>();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(Configuration.class.getClassLoader().getResourceAsStream(Constants.JDK_INHERITANCE_BLACKLIST_FILENAME)));
+        try(InputStreamReader isr = new InputStreamReader(Configuration.class.getClassLoader().getResourceAsStream(Constants.JDK_INHERITANCE_BLACKLIST_FILENAME)); BufferedReader reader = new BufferedReader(isr)) {
+
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] parts = line.split(",");
                 String owner = parts[0];
@@ -62,7 +61,7 @@ public final class ConfigurationLoader {
                 methodList.add(new BlackListEntry(name, descriptor, Opcodes.ACC_PUBLIC));
             }
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new ConfigurationException(ex);
         }
         return map;
     }
@@ -87,13 +86,14 @@ public final class ConfigurationLoader {
         } else {
             try {
                 if (f.exists() && f.isFile()) {
-                    FileInputStream fi = new FileInputStream(f);
-                    if (f.getName().endsWith(Constants.JSON_FILE_SUFFIX)) {
-                        c = readJsonConfiguration(fi);
-                    } else if (f.getName().endsWith(Constants.XML_FILE_SUFFIX)) {
-                        c = readXmlConfiguration(fi);
-                    } else {
-                        logger.error("File {} ending not recognised!", f.getAbsolutePath());
+                    try(FileInputStream fi = new FileInputStream(f)) {
+                        if (f.getName().endsWith(Constants.JSON_FILE_SUFFIX)) {
+                            c = readJsonConfiguration(fi);
+                        } else if (f.getName().endsWith(Constants.XML_FILE_SUFFIX)) {
+                            c = readXmlConfiguration(fi);
+                        } else {
+                            logger.error("File {} ending not recognised!", f.getAbsolutePath());
+                        }
                     }
                 } else {
                     logger.error("File {} does not exist!", f.getAbsolutePath());

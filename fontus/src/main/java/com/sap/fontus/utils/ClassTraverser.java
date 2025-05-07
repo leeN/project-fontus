@@ -2,6 +2,7 @@ package com.sap.fontus.utils;
 
 import com.sap.fontus.asm.*;
 import com.sap.fontus.asm.resolver.ClassResolverFactory;
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.utils.lookups.CombinedExcludedLookup;
 import com.sap.fontus.instrumentation.Method;
 import com.sap.fontus.asm.resolver.IClassResolver;
@@ -135,7 +136,7 @@ public class ClassTraverser {
             }
             return true;
         } else {
-            throw new RuntimeException("Could not load super class");
+            throw new FontusRuntimeException("Could not load super class");
         }
     }
 

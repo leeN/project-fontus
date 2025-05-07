@@ -1,5 +1,6 @@
 package com.sap.fontus.manual.groovy.converters;
 
+import com.sap.fontus.exceptions.InitializationException;
 import com.sap.fontus.utils.ConversionUtils;
 import com.sap.fontus.asm.resolver.ClassResolverFactory;
 
@@ -24,7 +25,7 @@ public final class DGMMethodConverter {
             returnTypeSetter = lookup.findSetter(dgmMethodClass, "returnType", Class.class);
         } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new InitializationException(e);
         }
     }
 

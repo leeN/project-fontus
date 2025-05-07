@@ -15,6 +15,10 @@ public class IASTaintSourceRegistry extends GenericRegistry<IASTaintSource> {
     private static IASTaintSourceRegistry instance;
     private static boolean isPopulated;
 
+    private IASTaintSourceRegistry() {
+        super();
+    }
+
     private synchronized void populateFromConfiguration(Configuration c) {
         if (!isPopulated) {
             for (com.sap.fontus.config.Source s : c.getSourceConfig().getSources()) {

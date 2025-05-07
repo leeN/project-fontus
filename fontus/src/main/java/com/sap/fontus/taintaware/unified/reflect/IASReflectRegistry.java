@@ -4,12 +4,15 @@ import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class IASReflectRegistry {
+public final class IASReflectRegistry {
     private static final IASReflectRegistry INSTANCE = new IASReflectRegistry();
-    // TODO: Replace with ConcurrentHashMap and get rid of synchronized
     private final Map<Field, IASField> fields = new ConcurrentHashMap<>();
     private final Map<Method, IASMethod> methods = new ConcurrentHashMap<>();
     private final Map<Constructor<?>, IASConstructor<?>> constructors = new ConcurrentHashMap<>();
+
+    private IASReflectRegistry() {
+
+    }
 
     public static IASReflectRegistry getInstance() {
         return INSTANCE;

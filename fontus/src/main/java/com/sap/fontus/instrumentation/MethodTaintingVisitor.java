@@ -444,7 +444,7 @@ public class MethodTaintingVisitor extends BasicMethodVisitor {
         // Add Sink transformations
         Sink sink = this.config.getSinkConfig().getSinkForFunction(uninstrumentedCall, new Position(this.owner, this.name, this.line));
         if (sink != null) {
-	    System.out.printf("Adding IASString sink: %s%s:%s%n", uninstrumentedCall.getOwner(), uninstrumentedCall.getName(), uninstrumentedCall.getDescriptor());
+	        System.out.printf("Adding IASString sink: %s%s:%s%n", uninstrumentedCall.getOwner(), uninstrumentedCall.getName(), uninstrumentedCall.getDescriptor());
             if(LogUtils.LOGGING_ENABLED) {
                 logger.info("Adding sink checks for [{}] {}.{}{}", Utils.opcodeToString(uninstrumentedCall.getOpcode()), uninstrumentedCall.getOwner(), uninstrumentedCall.getName(), uninstrumentedCall.getDescriptor());
             }

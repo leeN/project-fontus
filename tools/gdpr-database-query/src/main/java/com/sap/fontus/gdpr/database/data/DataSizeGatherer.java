@@ -44,8 +44,8 @@ class DataSizeGatherer extends AbstractInformationGatherer {
 
     public void printStatistics() {
         long total = 0L;
-        for (String key: this.sizeMap.keySet()) {
-            long rowSize = this.sizeMap.get(key);
+        for (Map.Entry<String,Long> e: this.sizeMap.entrySet()) {
+            long rowSize = e.getValue();
             // System.out.println(key + ": " + rowSize);
             if (rowSize > 0L) {
                 total += rowSize;

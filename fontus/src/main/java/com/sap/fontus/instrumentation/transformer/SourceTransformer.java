@@ -5,6 +5,7 @@ import com.sap.fontus.config.Source;
 import com.sap.fontus.Constants;
 import com.sap.fontus.asm.Descriptor;
 import com.sap.fontus.asm.FunctionCall;
+import com.sap.fontus.exceptions.ConfigurationException;
 import com.sap.fontus.instrumentation.MethodTaintingUtils;
 import com.sap.fontus.instrumentation.MethodTaintingVisitor;
 import com.sap.fontus.taintaware.shared.IASTaintSource;
@@ -67,7 +68,7 @@ public class SourceTransformer extends SourceOrSinkTransformer implements Return
                     Constants.TaintHandlerTaintDesc,                      // Object taint(Object object, Object parentObject, Object[] parameters, int sourceId)
                     false);
         } else if (!IASTaintHandler.isValidTaintHandler(taint)) {
-            throw new RuntimeException("Invalid Taint Handler in configuration file!");
+            throw new ConfigurationException("Invalid Taint Handler in configuration file!");
         }
 
         // Call the handler:

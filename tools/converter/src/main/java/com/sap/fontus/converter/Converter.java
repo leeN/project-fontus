@@ -296,8 +296,9 @@ public class Converter implements Callable<Void> {
         ObjectMapper objectMapper = new XmlMapper(new WstxInputFactory(), new WstxOutputFactory());
         objectMapper.registerModule(new JaxbAnnotationModule());
         ObjectWriter objectWriter = objectMapper.writerFor(Configuration.class);
-        FileWriter fileWriter = new FileWriter(this.outputFile, StandardCharsets.UTF_8);
-        objectWriter.writeValue(fileWriter, configuration);
+        try(FileWriter fileWriter = new FileWriter(this.outputFile, StandardCharsets.UTF_8)) {
+            objectWriter.writeValue(fileWriter, configuration);
+        }
     }
 
     public static void main(String[] args) {

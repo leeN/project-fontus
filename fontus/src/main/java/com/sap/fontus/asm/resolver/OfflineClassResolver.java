@@ -1,6 +1,7 @@
 package com.sap.fontus.asm.resolver;
 
 import com.sap.fontus.agent.InstrumentationConfiguration;
+import com.sap.fontus.exceptions.ClassResolvingException;
 import com.sap.fontus.utils.Utils;
 
 import java.io.*;
@@ -71,10 +72,10 @@ public class OfflineClassResolver implements IClassResolver {
             } else {
                 JarClassResolver jarClassResolver = new JarClassResolver();
 
-                try {
-                    jarClassResolver.loadClassesFrom(new FileInputStream(input)).forEach(classes::putIfAbsent);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
+                try(FileInputStream fis = new FileInputStream(input)) {
+                    jarClassResolver.loadClassesFrom(fis).forEach(classes::putIfAbsent);
+                } catch (IOException e) {
+                    throw new ClassResolvingException(e);
                 }
             }
         }

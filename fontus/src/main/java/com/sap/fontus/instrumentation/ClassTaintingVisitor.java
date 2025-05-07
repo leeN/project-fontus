@@ -5,6 +5,7 @@ import com.sap.fontus.asm.*;
 import com.sap.fontus.asm.speculative.SpeculativeParallelInstrumenter;
 import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.TaintMethod;
+import com.sap.fontus.exceptions.ConfigurationException;
 import com.sap.fontus.taintaware.unified.IASString;
 import com.sap.fontus.utils.*;
 import com.sap.fontus.utils.lookups.AnnotationLookup;
@@ -870,7 +871,7 @@ class ClassTaintingVisitor extends ClassVisitor {
             try {
                 parseOffline = org.objectweb.asm.commons.Method.getMethod(Configuration.class.getMethod("parseOffline", TaintMethod.class));
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
+                throw new ConfigurationException(e);
             }
             String parseOfflineOwner = Utils.dotToSlash(Configuration.class.getName());
             String parseOfflineName = parseOffline.getName();

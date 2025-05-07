@@ -1,5 +1,6 @@
 package com.sap.fontus.utils;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import jdk.internal.misc.Unsafe;
 import jdk.internal.vm.annotation.ForceInline;
 
@@ -61,7 +62,7 @@ public class UnsafeUtils {
             return collectionClass.getConstructor().newInstance();
         } catch (IOException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException | ClassNotFoundException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
+            throw new FontusRuntimeException(e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.sap.fontus.taintaware.unified;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.taintaware.shared.IASTaintMetadata;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public final class TURLEncoder {
         try {
             return encode(url, new IASStringBuilder().append(Charset.defaultCharset().toString()).toIASString());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FontusRuntimeException(e);
         }
     }
 

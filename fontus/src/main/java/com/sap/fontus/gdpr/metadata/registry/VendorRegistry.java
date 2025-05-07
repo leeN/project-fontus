@@ -14,7 +14,7 @@ public class VendorRegistry  {
     private final Map<String, Vendor> vendors;
     private int counter = 0;
 
-    public VendorRegistry() {
+    private VendorRegistry() {
         this.vendors = new ConcurrentHashMap<>(32);
     }
 

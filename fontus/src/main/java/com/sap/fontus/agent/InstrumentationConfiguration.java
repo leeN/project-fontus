@@ -1,5 +1,7 @@
 package com.sap.fontus.agent;
 
+import com.sap.fontus.exceptions.ConfigurationException;
+
 import java.io.File;
 
 public class InstrumentationConfiguration {
@@ -18,7 +20,7 @@ public class InstrumentationConfiguration {
 
     public static InstrumentationConfiguration getInstance() {
         if (instance == null) {
-            throw new RuntimeException("Instrumentation info not initialized!");
+            throw new ConfigurationException("Instrumentation info not initialized!");
         }
         return instance;
     }

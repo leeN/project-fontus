@@ -1,5 +1,6 @@
 package com.sap.fontus.taintaware.unified;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.taintaware.IASTaintAware;
 
 import java.io.*;
@@ -160,7 +161,7 @@ public class IASFormatter implements Closeable, Flushable {
                 ((AutoCloseable) this.output).close();
                 this.closed = true;
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new FontusRuntimeException(e);
             }
         }
     }

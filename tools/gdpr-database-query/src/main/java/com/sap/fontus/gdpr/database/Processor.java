@@ -57,13 +57,13 @@ public class Processor {
 
     private int getTableSize(Connection conn, String catalog, String table) {
         int size = -1;
-        try {
-            PreparedStatement ps = conn.prepareStatement("SELECT (DATA_LENGTH + INDEX_LENGTH) AS SIZE FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME=?");
+        try (PreparedStatement ps = conn.prepareStatement("SELECT (DATA_LENGTH + INDEX_LENGTH) AS SIZE FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME=?")) {
             ps.setString(1, catalog);
             ps.setString(2, table);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            size = rs.getInt("SIZE");
+            try(ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                size = rs.getInt("SIZE");
+            }
         } catch (SQLException e) {
             System.out.println("Exception computing table size: " + e.getMessage());
         }

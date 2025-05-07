@@ -658,16 +658,24 @@ public final class Configuration {
         this.speculativeInstrumentation = speculativeInstrumentation;
     }
 
-    public boolean validate() {
+    /**
+     * Validates the converters that are defined in the loaded configuration.
+     * <p>
+     * This tries to load every converter, so if it is provided in the old form (i.e., in the de.tubs.cs.ias package) the loading fails and an error is printed.
+     * To avoid spamming stdout, we exclude converters that are specialized for specific jars (i.e., those that reside in the manual package)
+     * </p>
+     */
+    public void validate() {
         for(FunctionCall fc : this.converters) {
             try {
-                Method m = FunctionCall.toMethod(fc);
+                if(!fc.getOwner().startsWith("com.sap.fontus.manual.")) {
+                    Method m = FunctionCall.toMethod(fc);
+                }
             } catch(ExceptionInInitializerError ex) {
                 System.out.printf("Converter '%s' is invalid due to: %s%n", fc.getName(), ex.getCause().getMessage());
             } catch (ClassNotFoundException | NoSuchMethodException ex) {
                 System.out.printf("Converter '%s' is invalid due to: %s%n", fc.getName(), ex.getMessage());
             }
         }
-        return true;
     }
 }

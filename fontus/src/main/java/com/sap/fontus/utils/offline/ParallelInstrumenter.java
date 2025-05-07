@@ -1,5 +1,6 @@
 package com.sap.fontus.utils.offline;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.utils.Pair;
 
 import java.util.concurrent.*;
@@ -38,7 +39,7 @@ public class ParallelInstrumenter {
             processingExecutor.awaitTermination(15L, TimeUnit.MINUTES);
             outputExecutor.awaitTermination(15L, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new FontusRuntimeException(e);
         }
     }
 }

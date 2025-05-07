@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.alibaba.druid.util.JdbcUtils.executeQuery;
+
 public final class Sanitization {
 
     private Sanitization() {
@@ -300,7 +302,9 @@ public final class Sanitization {
         } else {
             try {
                 // no sanatization necessary, use regular statement to execute the query
-                return con.createStatement().executeQuery(taintedString);
+                try(Statement statement = con.createStatement()) {
+                    return statement.executeQuery(taintedString);
+                }
             } catch (Exception e) {
                 // Cannot create prepared statement due to syntax error.
                 // sanatization NOT successful

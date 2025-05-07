@@ -2,6 +2,7 @@ package com.sap.fontus.utils;
 
 
 import com.sap.fontus.Constants;
+import com.sap.fontus.exceptions.FontusRuntimeException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -15,7 +16,7 @@ public final class ReflectionUtils {
 
     private ReflectionUtils() {
     }
-    
+
     public static Class<?> getCallerClass() {
         if (Constants.JAVA_VERSION >= 9) {
             return StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).walk((Function<Stream<StackWalker.StackFrame>, Class<?>>) stackFrameStream -> stackFrameStream.filter(new Predicate<>() {
@@ -42,7 +43,7 @@ public final class ReflectionUtils {
             }
         }
         if (caller == null) {
-            throw new RuntimeException("Caller couldn't be found");
+            throw new FontusRuntimeException("Caller couldn't be found");
         }
         return caller;
     }
@@ -57,7 +58,7 @@ public final class ReflectionUtils {
                     MethodAccessor = Class.forName("jdk.internal.reflect.MethodAccessor");
                     ConstructorAccessor = Class.forName("jdk.internal.reflect.ConstructorAccessor");
                 } catch (ClassNotFoundException classNotFoundException) {
-                    throw new RuntimeException("Couldnt find MethodAccessor or ConstructorAccessor class");
+                    throw new FontusRuntimeException("Couldnt find MethodAccessor or ConstructorAccessor class");
                 }
             }
         }

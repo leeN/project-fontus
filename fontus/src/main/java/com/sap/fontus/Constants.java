@@ -2,6 +2,7 @@ package com.sap.fontus;
 
 import com.sap.fontus.asm.Descriptor;
 import com.sap.fontus.asm.FunctionCall;
+import com.sap.fontus.exceptions.InitializationException;
 import com.sap.fontus.taintaware.unified.IASCompareProxy;
 import com.sap.fontus.taintaware.unified.IASString;
 import com.sap.fontus.taintaware.unified.IASTaintHandler;
@@ -75,7 +76,7 @@ public final class Constants {
             PropertyDesc = Descriptor.classNameToDescriptorName(Properties.class.getName());
             PropertyQN = Utils.getInternalName(Properties.class);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new InitializationException(e);
         }
     }
 

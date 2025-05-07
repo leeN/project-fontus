@@ -12,9 +12,9 @@ public final class CompatHelper {
     private CompatHelper() {
         this.implementations = new ConcurrentHashMap<>();
         // TODO: Replace with generic version based on reflection?
-        this.registerImplementation( new SqliteCollation());
-        this.registerImplementation( new SqliteNativeDB());
-        this.registerImplementation( new SqliteDB());
+        this.registerImplementation(new SqliteCollation());
+        this.registerImplementation(new SqliteNativeDB());
+        this.registerImplementation(new SqliteDB());
     }
 
     public void registerImplementation(CompatImplementation implementation) {

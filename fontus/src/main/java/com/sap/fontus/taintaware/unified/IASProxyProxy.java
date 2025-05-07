@@ -175,7 +175,7 @@ public class IASProxyProxy {
         }
     }
 
-    class NullSentinel {
+    static class NullSentinel {
 
     }
 }

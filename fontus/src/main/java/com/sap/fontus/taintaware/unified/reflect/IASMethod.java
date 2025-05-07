@@ -7,6 +7,7 @@ import com.sap.fontus.config.Configuration;
 import com.sap.fontus.config.Sink;
 import com.sap.fontus.config.SinkParameter;
 import com.sap.fontus.config.Source;
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.instrumentation.InstrumentationHelper;
 import com.sap.fontus.taintaware.shared.IASTaintSourceRegistry;
 import com.sap.fontus.taintaware.unified.IASString;
@@ -35,7 +36,7 @@ public class IASMethod extends IASExecutable<Method> {
             forNameMethod = Class.class.getMethod("forName", String.class);
         } catch (NoSuchMethodException e) {
             System.out.println("Could not load method Class.forName");
-            throw new RuntimeException(e);
+            throw new FontusRuntimeException(e);
         }
     }
 

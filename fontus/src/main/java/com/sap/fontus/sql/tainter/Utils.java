@@ -1,5 +1,6 @@
 package com.sap.fontus.sql.tainter;
 
+import com.sap.fontus.exceptions.SqlTaintingException;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
@@ -77,7 +78,7 @@ public final class Utils {
             stmts.accept(tainter);
             return stmts.toString().trim();
         } catch(JSQLParserException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlTaintingException(ex);
         }
     }
 }

@@ -6,13 +6,13 @@ import com.sap.fontus.gdpr.metadata.simple.SimplePurpose;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PurposeRegistry {
+public final class PurposeRegistry {
 
     private static PurposeRegistry instance;
     private final Map<String, Purpose> purposes;
     private int counter = 0;
 
-    public PurposeRegistry() {
+    private PurposeRegistry() {
         this.purposes = new ConcurrentHashMap<>(32);
     }
     private static boolean isPopulated;

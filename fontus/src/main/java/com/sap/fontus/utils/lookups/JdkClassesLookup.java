@@ -1,5 +1,6 @@
 package com.sap.fontus.utils.lookups;
 
+import com.sap.fontus.exceptions.InitializationException;
 import com.sap.fontus.utils.ClassUtils;
 import com.sap.fontus.utils.LogUtils;
 import com.sap.fontus.utils.Logger;
@@ -51,7 +52,7 @@ public final class JdkClassesLookup {
 
         } catch (Exception e) { //TODO: Think about proper error handling
             logger.error("Can't load the class list", e);
-            throw new RuntimeException(e);
+            throw new InitializationException(e);
         }
     }
 

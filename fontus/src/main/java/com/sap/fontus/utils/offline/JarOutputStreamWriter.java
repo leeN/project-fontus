@@ -1,5 +1,6 @@
 package com.sap.fontus.utils.offline;
 
+import com.sap.fontus.exceptions.FontusRuntimeException;
 import com.sap.fontus.utils.Pair;
 
 import java.io.ByteArrayInputStream;
@@ -34,7 +35,7 @@ class JarOutputStreamWriter implements Consumer<Pair<JarEntry, byte[]>> {
             }
             this.jos.closeEntry();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FontusRuntimeException(e);
         }
     }
 

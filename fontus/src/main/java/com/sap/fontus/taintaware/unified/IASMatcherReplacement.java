@@ -26,9 +26,10 @@ public final class IASMatcherReplacement {
         int shift = 0;
         emptyBuilder.append(this.clearedReplacementString);
 
-        for (Object key : this.groups.keySet()) {
+        for (Map.Entry<Object, Integer> entry : this.groups.entrySet()) {
             int start;
             int end;
+            Object key = entry.getKey();
             if (key instanceof String s) {
                 start = m.start(s);
                 end = m.end(s);
@@ -41,7 +42,7 @@ public final class IASMatcherReplacement {
 
             IASString insert = orig.substring(start, end);
 
-            int index = this.groups.get(key);
+            int index = entry.getValue();
             if (index < lastIndex) {
                 throw new IllegalStateException("Map not sorted ascending");
             }
